@@ -9,7 +9,7 @@ import {
   InputRightElement,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +19,9 @@ export function MemberSignup() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [nickName, setNickName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckedEmail, setIsCheckedEmail] = useState(false);
+  const [isCheckedNickName, setIsCheckedNickName] = useState(false);
+
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -32,6 +35,7 @@ export function MemberSignup() {
           description: "회원 가입이 완료되었습니다.",
           position: "top",
         });
+        // todo : 로그인 화면으로 이동
         navigate("/");
       })
       .catch((err) => {
@@ -49,7 +53,9 @@ export function MemberSignup() {
           });
         }
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleCheckEmail() {
@@ -61,7 +67,7 @@ export function MemberSignup() {
           description: "사용할 수 없는 이메일입니다.",
           position: "top",
         });
-      }) // 이미 있는 이메일
+      }) // 이미 있는 이메일 (사용 못함)
       .catch((err) => {
         if (err.response.status === 404) {
           // 사용할 수 있는 이메일
@@ -70,6 +76,7 @@ export function MemberSignup() {
             description: "사용할 수 있는 이메일입니다.",
             position: "top",
           });
+          setIsCheckedEmail(true);
         }
       })
       .finally();
@@ -84,15 +91,15 @@ export function MemberSignup() {
           description: "사용할 수 없는 별명입니다.",
           position: "top",
         });
-      }) // 이미 있는 이메일
+      })
       .catch((err) => {
         if (err.response.status === 404) {
-          // 사용할 수 있는 이메일
           toast({
             status: "info",
             description: "사용할 수 있는 별명입니다.",
             position: "top",
           });
+          setIsCheckedNickName(true);
         }
       })
       .finally();
@@ -116,6 +123,14 @@ export function MemberSignup() {
     isDisabled = true;
   }
 
+  if (!isCheckedEmail) {
+    isDisabled = true;
+  }
+
+  if (!isCheckedNickName) {
+    isDisabled = true;
+  }
+
   return (
     <Box>
       <Box>회원 가입</Box>
@@ -124,13 +139,21 @@ export function MemberSignup() {
           <FormControl>
             <FormLabel>이메일</FormLabel>
             <InputGroup>
-              <Input onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setIsCheckedEmail(false);
+                }}
+              />
               <InputRightElement w={"75px"} mr={1}>
                 <Button onClick={handleCheckEmail} size={"sm"}>
                   중복확인
                 </Button>
               </InputRightElement>
             </InputGroup>
+            {isCheckedEmail || (
+              <FormHelperText>이메일 중복확인을 해주세요.</FormHelperText>
+            )}
           </FormControl>
         </Box>
         <Box>
@@ -149,16 +172,25 @@ export function MemberSignup() {
           </FormControl>
         </Box>
         <Box>
-          <FormControl></FormControl>
-          <FormLabel>별명</FormLabel>
-          <InputGroup>
-            <Input onChange={(e) => setNickName(e.target.value)} />
-            <InputRightElement w={"75px"} mr={1}>
-              <Button onClick={handleCheckNickName} size={"sm"}>
-                중복확인
-              </Button>
-            </InputRightElement>
-          </InputGroup>
+          <FormControl>
+            <FormLabel>별명</FormLabel>
+            <InputGroup>
+              <Input
+                onChange={(e) => {
+                  setNickName(e.target.value);
+                  setIsCheckedNickName(false);
+                }}
+              />
+              <InputRightElement w={"75px"} mr={1}>
+                <Button size={"sm"} onClick={handleCheckNickName}>
+                  중복확인
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+            {isCheckedNickName || (
+              <FormHelperText>별명 중복확인을 해주세요.</FormHelperText>
+            )}
+          </FormControl>
         </Box>
         <Box>
           <Button
@@ -168,7 +200,7 @@ export function MemberSignup() {
             isDisabled={isDisabled}
           >
             가입
-          </Button>{" "}
+          </Button>
         </Box>
       </Box>
     </Box>
