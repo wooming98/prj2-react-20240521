@@ -6,7 +6,7 @@ export const LoginContext = createContext(null);
 export function LoginProvider({ children }) {
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
-  const [expired, setExpired] = useState();
+  const [expired, setExpired] = useState(0);
 
   // isLoggedIn
   function isLoggedIn() {
@@ -24,7 +24,6 @@ export function LoginProvider({ children }) {
     setExpired(payload.exp);
     setEmail(payload.sub);
     setNickName(payload.nickName);
-    jwtDecode();
   }
 
   // logout
