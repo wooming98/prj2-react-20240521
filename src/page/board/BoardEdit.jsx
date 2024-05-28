@@ -6,6 +6,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -86,12 +87,17 @@ export function BoardEdit() {
           </FormControl>
         </Box>
         <Box>
+          {board.files &&
+            board.files.map((file) => (
+              <Box border={"2px solid black"} m={3} key={file.name}>
+                <Image src={file.src} />
+              </Box>
+            ))}
+        </Box>
+        <Box>
           <FormControl>
             <FormLabel>작성자</FormLabel>
-            <Input
-              defaultValue={board.writer}
-              onChange={(e) => setBoard({ ...board, writer: e.target.value })}
-            />
+            <Input defaultValue={board.writer} readOnly />
           </FormControl>
         </Box>
         <Box>
