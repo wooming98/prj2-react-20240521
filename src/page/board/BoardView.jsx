@@ -23,13 +23,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { LoginContext } from "../../component/LoginProvider.jsx";
-import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function BoardView() {
   const { id } = useParams();
   const [board, setBoard] = useState(null);
+
   const [like, setLike] = useState({
     like: false,
     count: 0,
@@ -86,22 +87,28 @@ export function BoardView() {
     return <Spinner />;
   }
 
+  function handleClickLike() {
+    axios
+      .put(`/api/board/like`, { boardId: board.id })
+      .then((res) => {
+        setLike(res.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }
+
   return (
     <Box>
       <Flex>
-        <Heading>
-          <Box>{board.id}번 게시물</Box>
-        </Heading>
+        <Heading>{board.id}번 게시물</Heading>
         <Spacer />
-        <Box
-          onClick={() => setLike({ ...like, like: !like.like })}
-          cursor="pointer"
-          fontSize="3xl"
-        >
-          {like.like && <FontAwesomeIcon icon={fullHeart} />}
-          {like.like || <FontAwesomeIcon icon={emptyHeart} />}
-        </Box>
-        <Box fontSize="3xl">{like.count}</Box>
+        <Flex>
+          <Box onClick={handleClickLike} cursor="pointer" fontSize="3xl">
+            {like.like && <FontAwesomeIcon icon={fullHeart} />}
+            {like.like || <FontAwesomeIcon icon={emptyHeart} />}
+          </Box>
+          <Box fontSize="3xl">{like.count}</Box>
+        </Flex>
       </Flex>
       <Box>
         <FormControl>
