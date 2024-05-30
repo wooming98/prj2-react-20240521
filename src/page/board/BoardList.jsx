@@ -20,7 +20,7 @@ import {
   faAnglesLeft,
   faAnglesRight,
   faHeart,
-  faImage,
+  faImages,
   faMagnifyingGlass,
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
@@ -103,7 +103,7 @@ export function BoardList() {
                     {board.title}
                     {board.numberOfImages > 0 && (
                       <Badge>
-                        <FontAwesomeIcon icon={faImage} />
+                        <FontAwesomeIcon icon={faImages} />
                         {board.numberOfImages}
                       </Badge>
                     )}

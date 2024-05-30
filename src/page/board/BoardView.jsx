@@ -180,7 +180,7 @@ export function BoardView() {
         </Box>
       )}
 
-      <CommentComponent />
+      <CommentComponent boardId={board.id} />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

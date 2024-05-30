@@ -7,8 +7,8 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider.jsx";
 
 export function MemberLogin() {
@@ -20,9 +20,10 @@ export function MemberLogin() {
 
   function handleLogin() {
     axios
-      .post("/api/member/token", { email: email, password: password })
+      .post("/api/member/token", { email, password })
       .then((res) => {
         account.login(res.data.token);
+
         toast({
           status: "success",
           description: "로그인 되었습니다.",
@@ -32,6 +33,7 @@ export function MemberLogin() {
       })
       .catch(() => {
         account.logout();
+
         toast({
           status: "warning",
           description: "이메일과 패스워드를 확인해주세요.",
@@ -42,22 +44,25 @@ export function MemberLogin() {
 
   return (
     <Box>
+      <Box>로그인</Box>
       <Box>
-        <FormControl>
-          <FormLabel>이메일</FormLabel>
-          <Input onChange={(e) => setEmail(e.target.value)} />
-        </FormControl>
-      </Box>
-      <Box>
-        <FormControl>
-          <FormLabel>암호</FormLabel>
-          <Input onChange={(e) => setPassword(e.target.value)} />
-        </FormControl>
-      </Box>
-      <Box>
-        <Button onClick={handleLogin} colorScheme={"blue"}>
-          로그인
-        </Button>
+        <Box>
+          <FormControl>
+            <FormLabel>이메일</FormLabel>
+            <Input onChange={(e) => setEmail(e.target.value)} />
+          </FormControl>
+        </Box>
+        <Box>
+          <FormControl>
+            <FormLabel>암호</FormLabel>
+            <Input onChange={(e) => setPassword(e.target.value)} />
+          </FormControl>
+        </Box>
+        <Box>
+          <Button onClick={handleLogin} colorScheme={"blue"}>
+            로그인
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

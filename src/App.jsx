@@ -28,7 +28,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Home />,
     children: [
-      { index: true, element: <BoardList /> },
+      {
+        index: true,
+        element: <BoardList />,
+      },
       { path: "write", element: <BoardWrite /> },
       { path: "board/:id", element: <BoardView /> },
       { path: "edit/:id", element: <BoardEdit /> },
